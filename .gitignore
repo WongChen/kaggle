@@ -1,0 +1,21 @@
+
+
+# data
+
+*.csv
+*.csv#
+
+# python
+
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+dist
+build
+
+# tensorflow
+
+*.ckpt
+*.meta
+checkpoint
