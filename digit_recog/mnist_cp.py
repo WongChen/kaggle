@@ -80,12 +80,13 @@ cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(y_conv, y
 train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
 correct_prediction = tf.equal(tf.argmax(y_conv,1), tf.argmax(y_,1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-sess.run(tf.initialize_all_variables())
+#sess.run(tf.initialize_all_variables())
 
 # saver
 saver = tf.train.Saver()
-for i in range(60100):
-    batch = mm.read_next_batch(25)
+saver.restore(sess,"mnist_expert_model2.ckpt")
+for i in range(4000):
+    batch = mm.read_next_batch(50)
     if i%100 == 0:
         train_accuracy = accuracy.eval(feed_dict={
         x:batch[0], y_: batch[1], keep_prob: 1.0})
@@ -93,8 +94,8 @@ for i in range(60100):
 # add keep_prob to control the dropout rate
     train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
 #save variables to the current dir
-save_path = saver.save(sess, "mnist_expert_model.ckpt")
-print "Model saved in file: ", save_path
+save_path = saver.save(sess, "mnist_expert_model3.ckpt")
+#print "Model saved in file: ", save_path
 
 predict = []
 for i in xrange(len(mm.test_values)/100):
@@ -106,4 +107,4 @@ df = pd.DataFrame(range(len(mm.test_values)),columns=['ImageId'])
 df = df.add(1)
 df['Label'] = predict
 
-df.to_csv('result.csv',index=False,index_label=False)
+df.to_csv('result3.csv',index=False,index_label=False)
